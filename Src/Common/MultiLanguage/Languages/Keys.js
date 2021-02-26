@@ -184,6 +184,9 @@ const Keys = {
     cost_saving: 'cost_saving',
     cost_saving_dec: 'cost_saving_dec',
     advanced_reserve: 'advanced_reserve',
+
+    configuaration_energy_rates: 'configuaration_energy_rates',
+    configuaration_device: 'configuaration_device',
 };
 
 export default Keys;

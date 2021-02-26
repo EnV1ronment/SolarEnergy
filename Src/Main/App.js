@@ -29,8 +29,14 @@ import LanguagePage from "../Page/Mine/Settings/Language/LanguagePage";
 import SiteInfoPage from "../Page/Home/Site/SiteInfoPage";
 import AddSitePage from "../Page/Home/Site/Add/AddSitePage";
 // import MapPage from "../Page/Home/Site/Add/Map/MapPage";
+import BaiduMapPage from "../Page/Home/Site/Add/Map/BaiduMapPage";
+import PhotoPage from "../Page/Home/Site/Add/Photo/PhotoPage";
+import TimeZonePage from "../Page/Home/Site/Add/TimeZone/TimeZonePage";
+import ConfigurationPage from "../Page/Home/Site/Add/Configuration/ConfigurationPage";
+import EnergyRatesPage from "../Page/Home/Site/Add/EnergyRates/EnergyRatesPage";
 import MapSearchPage from "../Page/Home/Site/Add/Map/MapSearchPage";
 import CustomizePage from "../Page/Home/Site/Customize/CustomizePage";
+import donghua from "../Page/Home/Site/Add/donghua/donghua";
 
 // Components & model
 import BottomTabBar from "./BottomTabBar";
@@ -144,8 +150,14 @@ class App extends Component {
                 SiteInfoPage,
                 AddSitePage,
                 // MapPage,
+                BaiduMapPage,
+                PhotoPage,
+                TimeZonePage,
+                ConfigurationPage,
+                EnergyRatesPage,
                 MapSearchPage,
                 CustomizePage,
+                donghua,
             },
             {
                 initialRouteName: this.state.initialRouteName,

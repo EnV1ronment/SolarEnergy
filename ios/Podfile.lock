@@ -249,6 +249,8 @@ PODS:
     - React
   - react-native-geolocation (2.0.2):
     - React
+  - react-native-image-picker (2.3.4):
+    - React-Core
   - react-native-netinfo (5.9.10):
     - React-Core
   - react-native-splash-screen (3.2.0):
@@ -369,6 +371,7 @@ DEPENDENCIES:
   - react-native-baidu-map (from `../node_modules/react-native-baidu-map`)
   - react-native-camera (from `../node_modules/react-native-camera`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
+  - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - "react-native-viewpager (from `../node_modules/@react-native-community/viewpager`)"
@@ -443,6 +446,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-camera"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
+  react-native-image-picker:
+    :path: "../node_modules/react-native-image-picker"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-splash-screen:
@@ -515,6 +520,7 @@ SPEC CHECKSUMS:
   react-native-baidu-map: 7687f07f89d32ecf330a3d768a56e07c3f44083f
   react-native-camera: 375843010be62aed072d83c9df30efdeb3c8cbcb
   react-native-geolocation: cbd9d6bd06bac411eed2671810f454d4908484a8
+  react-native-image-picker: 32d1ad2c0024ca36161ae0d5c2117e2d6c441f11
   react-native-netinfo: 52cf0ee8342548a485e28f4b09e56b477567244d
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-viewpager: 248267e605c2d4edd26924da7f15032d57ac0b75

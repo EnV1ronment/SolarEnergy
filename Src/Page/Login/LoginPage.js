@@ -103,7 +103,7 @@ class LoginPage extends Component {
             >
                 <ImageBackground
                     style={styles.themeContainer}
-                    source={bgImage}
+                    //source={bgImage}
                 >
                     <LoginView
                         login={({userName, password}) => this._login(userName, password)}

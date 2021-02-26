@@ -4,9 +4,9 @@
   "release": true,
   "needPush": true,
   "appVersion": "2.0.0",
-  "online": "http://192.168.2.87:8001",
-  "debug1": "http://192.168.2.87:8001",
-  "debug": "http://192.168.2.87:8001",
+  "online": "http://192.168.2.88:8001",
+  "debug1": "http://192.168.2.88:8001",
+  "debug": "http://192.168.2.88:8001",
   "debug5": "http://39.108.124.91:8086",
   "debug3": "http://test.wankeauto.com:5001",
   "debug4": "http://192.168.2.100:8082"

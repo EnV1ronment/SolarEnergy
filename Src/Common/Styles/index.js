@@ -13,7 +13,7 @@ export default StyleSheet.create({
     },
     themeContainer: {
         flex: 1,
-        backgroundColor: Colors.theme,
+        //backgroundColor: Colors.theme,
     },
 
 });

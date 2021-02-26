@@ -186,4 +186,7 @@ export default {
     cost_saving: 'Cost Saving',
     cost_saving_dec: 'Minimize your energy cost automatedly',
     advanced_reserve: 'Reserve for Power Putages',
+
+    configuaration_energy_rates: 'Energy Rates',
+    configuaration_device: 'Device',
 };

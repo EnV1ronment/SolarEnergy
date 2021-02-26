@@ -62,9 +62,21 @@ const RouteKeys = {
 
     MapPage: 'MapPage',
 
+    BaiduMapPage: 'BaiduMapPage',
+
+    PhotoPage: 'PhotoPage',
+    
+    TimeZonePage: 'TimeZonePage',
+
+    ConfigurationPage: 'ConfigurationPage',
+
+    EnergyRatesPage: 'EnergyRatesPage',
+
     MapSearchPage: 'MapSearchPage',
 
     CustomizePage: 'CustomizePage',
+    
+    donghua: 'donghua',
 
 };
 

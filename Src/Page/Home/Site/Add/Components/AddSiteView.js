@@ -15,9 +15,11 @@ import site_location from '../../../../../Source/Status/site_location.png';
 import site_title_delete from '../../../../../Source/Status/site_title_delete.png';
 
 const titles = [
-    'Device SN:',
-    'Site Title:',
-    'Site Location:',
+    'Site Name:',
+    'Site Address:',
+    'Solar Capacity:',
+    'TimeZone:',
+    'Photo:',
 ];
 
 const icons = [
@@ -65,22 +67,8 @@ class AddSiteView extends Component {
     render() {
         return (
             <>
-                <View style={styles.container}>
-                    <Text style={styles.title}>{titles[0]}</Text>
-                    <TouchableOpacity
-                        style={styles.scanButton}
-                        activeOpacity={0.8}
-                        onPress={this.props.scanQRCode}
-                    >
-                        <Text style={styles.scanText} numberOfLines={2}>
-                            {this.props.sn}
-                        </Text>
-                        <Image source={icons[0]} resizeMode='contain'/>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={[styles.container, {paddingTop: 0, paddingBottom: 0}]}>
-                    <Text style={[styles.title, {alignSelf: 'center'}]}>{titles[1]}</Text>
+                    <View style={[styles.container, {paddingTop: 0, paddingBottom: 0}]}>
+                    <Text style={[styles.title, {alignSelf: 'center'}]}>{titles[0]}</Text>
                     <View style={[styles.scanButton, {
                         paddingTop: 0,
                         paddingBottom: 0,
@@ -111,8 +99,9 @@ class AddSiteView extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
+                
                 <View style={styles.container}>
-                    <Text style={styles.title}>{titles[2]}</Text>
+                    <Text style={styles.title}>{titles[1]}</Text>
                     <TouchableOpacity
                         style={styles.scanButton}
                         activeOpacity={0.8}
@@ -123,6 +112,102 @@ class AddSiteView extends Component {
                         </Text>
                         <Image source={icons[2]} resizeMode='contain'/>
                     </TouchableOpacity>
+                </View>
+                <View style={[styles.container, {paddingTop: 0, paddingBottom: 0}]}>
+                    <Text style={[styles.title, {alignSelf: 'center'}]}>{titles[2]}</Text>
+                    <View style={[styles.scanButton, {
+                        paddingTop: 0,
+                        paddingBottom: 0,
+                        paddingRight: 0,
+                    }]}>
+                        <TextInput
+                            keyboardType={'default'}
+                            placeholderTextColor={Colors.placeholder}
+                            selectionColor={Colors.white}
+                            autoFocus={false}
+                            style={styles.textInput}
+                            maxLength={10000}
+                            value={this._replaceSpace(this.state.title)}
+                            placeholder={'Please enter site title'}
+                            autoCapitalize={'none'}
+                            autoCorrect={false}
+                            secureTextEntry={false}
+                            returnKeyType={'done'}
+                            // contextMenuHidden={true} // Disable copy and paste
+                            onChangeText={this._onChangeText}
+                        />
+                        <TouchableOpacity
+                            style={styles.clearButton}
+                            disabled={!!!this.state.title}
+                            onPress={() => this.setState({title: ''})}
+                        >
+                            <Image source={icons[1]} resizeMode='contain'/>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={[styles.container, {paddingTop: 0, paddingBottom: 0}]}>
+                    <Text style={[styles.title, {alignSelf: 'center'}]}>{titles[3]}</Text>
+                    <View style={[styles.scanButton, {
+                        paddingTop: 0,
+                        paddingBottom: 0,
+                        paddingRight: 0,
+                    }]}>
+                        <TextInput
+                            keyboardType={'default'}
+                            placeholderTextColor={Colors.placeholder}
+                            selectionColor={Colors.white}
+                            autoFocus={false}
+                            style={styles.textInput}
+                            maxLength={10000}
+                            value={this._replaceSpace(this.state.title)}
+                            placeholder={'Please enter site title'}
+                            autoCapitalize={'none'}
+                            autoCorrect={false}
+                            secureTextEntry={false}
+                            returnKeyType={'done'}
+                            // contextMenuHidden={true} // Disable copy and paste
+                            onChangeText={this._onChangeText}
+                        />
+                        <TouchableOpacity
+                            style={styles.clearButton}
+                            disabled={!!!this.state.title}
+                            onPress={() => this.setState({title: ''})}
+                        >
+                            <Image source={icons[1]} resizeMode='contain'/>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={[styles.container, {paddingTop: 0, paddingBottom: 0}]}>
+                    <Text style={[styles.title, {alignSelf: 'center'}]}>{titles[4]}</Text>
+                    <View style={[styles.scanButton, {
+                        paddingTop: 0,
+                        paddingBottom: 0,
+                        paddingRight: 0,
+                    }]}>
+                        <TextInput
+                            keyboardType={'default'}
+                            placeholderTextColor={Colors.placeholder}
+                            selectionColor={Colors.white}
+                            autoFocus={false}
+                            style={styles.textInput}
+                            maxLength={10000}
+                            value={this._replaceSpace(this.state.title)}
+                            placeholder={'Please enter site title'}
+                            autoCapitalize={'none'}
+                            autoCorrect={false}
+                            secureTextEntry={false}
+                            returnKeyType={'done'}
+                            // contextMenuHidden={true} // Disable copy and paste
+                            onChangeText={this._onChangeText}
+                        />
+                        <TouchableOpacity
+                            style={styles.clearButton}
+                            disabled={!!!this.state.title}
+                            onPress={() => this.setState({title: ''})}
+                        >
+                            <Image source={icons[1]} resizeMode='contain'/>
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View style={{height: 300}}/>

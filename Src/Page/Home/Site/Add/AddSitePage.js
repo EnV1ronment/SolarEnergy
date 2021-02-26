@@ -49,36 +49,36 @@ class AddSitePage extends Component {
     };
 
     componentDidMount() {
-        this._loadCurrentLocation();
+        //this._loadCurrentLocation();
     }
 
     // Get user's current location coordination converted into detail address.
-    _loadCurrentLocation = (startLocationClicked = false) => {
-        WKLoading.show();
-        // Android cannot get current location with options on some devices.
-        const options = isIOS ? {
-            enableHighAccuracy: true,
-            timeout: 20000,
-            maximumAge: 1000,
-        } : null;
-        Geolocation.getCurrentPosition(position => {
-                this.state.hasAuthorized = true;
-                const {coords} = position;
-                const {latitude, longitude} = coords || {};
-                this.state.currentCoordinate = {latitude, longitude};
-                this._geocode(latitude, longitude, startLocationClicked);
-            }, error => {
-                const {message, code} = error || {};
-                // code: 3 -> Location request timed out.
-                if (code === 2 || code === 3) {
-                    this.state.hasAuthorized = false;
-                }
-                WKLoading.hide();
-                WKToast.show(__DEV__ ? `${message} (${code}) ` : message);
-            },
-            options,
-        );
-    };
+    // _loadCurrentLocation = (startLocationClicked = false) => {
+    //     WKLoading.show();
+    //     // Android cannot get current location with options on some devices.
+    //     const options = isIOS ? {
+    //         enableHighAccuracy: true,
+    //         timeout: 20000,
+    //         maximumAge: 1000,
+    //     } : null;
+    //     Geolocation.getCurrentPosition(position => {
+    //             this.state.hasAuthorized = true;
+    //             const {coords} = position;
+    //             const {latitude, longitude} = coords || {};
+    //             this.state.currentCoordinate = {latitude, longitude};
+    //             this._geocode(latitude, longitude, startLocationClicked);
+    //         }, error => {
+    //             const {message, code} = error || {};
+    //             // code: 3 -> Location request timed out.
+    //             if (code === 2 || code === 3) {
+    //                 this.state.hasAuthorized = false;
+    //             }
+    //             WKLoading.hide();
+    //             WKToast.show(__DEV__ ? `${message} (${code}) ` : message);
+    //         },
+    //         options,
+    //     );
+    // };
 
     _geocode = (lat, lng, startLocationClicked) => {
         const {isAddSite} = this.state;
@@ -123,14 +123,14 @@ class AddSitePage extends Component {
             currentAddress,
             hasAuthorized,
         } = this.state;
-        if (!hasAuthorized) {
-            WKAlert.show('To continue, turn on your location settings in Google Maps. If you have authorized in settings, please click "Ok" to continue.',
-                'CANCEL',
-                'OK', () => {
-                    this._loadCurrentLocation(true);
-                });
-            return;
-        }
+        // if (!hasAuthorized) {
+        //     WKAlert.show('To continue, turn on your location settings in Google Maps. If you have authorized in settings, please click "Ok" to continue.',
+        //         'CANCEL',
+        //         'OK', () => {
+        //             this._loadCurrentLocation(true);
+        //         });
+        //     return;
+        // }
         if (currentCoordinate && Object.keys(currentCoordinate).length) {
             const {navigation} = this.props;
             // navigation.navigate(RouteKeys.MapPage, {
@@ -152,7 +152,9 @@ class AddSitePage extends Component {
             //     },
             // });
         } else {
-            this._loadCurrentLocation();
+            const {navigation} = this.props;
+            navigation.navigate(RouteKeys.donghua);
+            //this._loadCurrentLocation();
         }
     };
 
