@@ -49,13 +49,13 @@ export default class WKNavigationBarLeftItem extends Component {
 const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
-        paddingLeft: 12,
+        paddingLeft: 20,
         paddingRight: 15,
         height: __iosNavigationBarHeight__
     },
     image: {
-        width: 7,
-        height: 13
+        width: 12,
+        height: 16
     },
     text: {
         color: Colors.white

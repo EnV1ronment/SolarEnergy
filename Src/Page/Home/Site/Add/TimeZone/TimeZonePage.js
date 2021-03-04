@@ -9,63 +9,61 @@ import {
 } from 'react-native';
 import WKGeneralBackground from "../../../../../Common/Components/WKGeneralBackground";
 import enter_arrow from '../../../../../Source/Common/enter_arrow.png';
-import Languages from "../../../../../Common/MultiLanguage/Languages";
 
-const rowHeight = 50;
-const marginTopOfFirstRow = 15;
-const marginTopOfRow = 6;
 
 class TimeZonePage extends Component {
 
-    state = {
-        language: WK_GetCurrentLocale(),
-        listHeight: 0,
-    };
+    constructor(props) {
+        super(props);
+        const {navigation} = props;
+        const {state} = navigation;
+        const {params} = state;
+        const {timezone} = params;
+        this.state = {
+            language: WK_GetCurrentLocale(),
+            listHeight: 0,
+            timezone
+        };
+    }
 
     dataSource = [
-        {title: WK_T(wkLanguageKeys.account_setting), route: RouteKeys.AccountPage},
-        // {title: WK_T(wkLanguageKeys.share_setting), route: RouteKeys.SharePage},
-        {title: WK_T(wkLanguageKeys.faq), route: RouteKeys.FAQPage},
-        // {title: WK_T(wkLanguageKeys.language), route: RouteKeys.LanguagePage},
-        {title: WK_T(wkLanguageKeys.about), route: RouteKeys.AboutPage},
+        {title: WK_T(wkLanguageKeys.Asia_Shanghai), value: 'Asia/Shanghai'},
+        {title: WK_T(wkLanguageKeys.Australia_Queensland), value: 'Australia/Queensland'},
     ];
 
-    // static navigationOptions = () => ({title: WK_T(wkLanguageKeys.setting)});
-    static navigationOptions = () => ({title: 'TimeZonePage'});
+    static navigationOptions = () => ({title: WK_T(wkLanguageKeys.timezone_title)});
 
-    _clickItem = (route) => {
-        this.props.navigation.navigate(route);
+    _clickItem = (timezone) => {
+        const {navigation} = this.props;
+        const {state} = navigation;
+        const {params} = state;
+        const {callback} = params;
+        callback(timezone);
+        navigation.goBack();
     };
 
     _renderItem = ({item, index}) => {
-        const {title, route} = item;
-        const {language} = this.state;
+        const {title, value} = item;
+        const {timezone} = this.state;
         return (
             <TouchableOpacity
                 style={[styles.cell, {
-                    height: rowHeight,
-                    marginTop: index ? marginTopOfRow : marginTopOfFirstRow,
+                    height: 60,
+                    borderTopWidth: index ? 2 : 0,
+                    borderTopColor: "rgb(34, 44, 63)",
                 }]}
                 activeOpacity={0.8}
-                onPress={() => this._clickItem(route)}
+                onPress={() => this._clickItem(value)}
             >
-                <Text style={styles.title}>{title}</Text>
-                <View style={styles.languageContainer}>
-                    {route === RouteKeys.LanguagePage && <Text style={styles.language}>{Languages[language]}</Text>}
-                    <Image source={enter_arrow} style={styles.arrow}/>
+                <Text style={styles.title} numberOfLines={1}>{title}</Text>
+                <View style={styles.container}>
+                    {value === timezone && <Image source={enter_arrow} style={styles.arrow}/>}
                 </View>
             </TouchableOpacity>
         );
     };
 
     render() {
-        const {
-            listHeight,
-            visible,
-        } = this.state;
-        const totalEachRowHeight = rowHeight + marginTopOfRow;
-        const listContentHeight = (totalEachRowHeight * this.dataSource.length - 1) + marginTopOfFirstRow;
-        const listFooterHeight = listHeight - listContentHeight;
         return (<WKGeneralBackground>
             <FlatList
                 renderItem={this._renderItem}
@@ -87,32 +85,28 @@ class TimeZonePage extends Component {
 const styles = StyleSheet.create({
     cell: {
         borderRadius: 3,
-        backgroundColor: Colors.cellBackgroundColor,
         marginLeft: 5,
         marginRight: 5,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingLeft: 10,
-        paddingRight: 8,
+        marginLeft: 14,
+        marginRight: 12,
     },
-    languageContainer: {
+    container: {
+        width: 20,
         flexDirection: 'row',
         alignItems: 'center',
     },
-    language: {
-        marginRight: 10,
-        fontSize: 11,
-        color: Colors.placeholder,
-    },
     title: {
+        flex: 1,
         marginLeft: 10,
         color: Colors.white,
-        fontSize: 14,
+        fontSize: 16,
     },
     arrow: {
-        width: 5,
-        height: 9,
+        width: 7,
+        height: 14,
     },
 })
 

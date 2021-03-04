@@ -10,9 +10,13 @@ import SiteModal from "./Components/SiteModal";
 import WKFetch from "../../Network/WKFetch";
 import WKEmptyView from "../../Common/Components/WKEmptyView";
 import AddSiteButton from "./Components/AddSiteButton";
-
+import WKNavigationBarRightItem from "../../Common/Components/WKNavigationBarRightItem";
+import add_site_btn from '../../Source/Me/me_search_icon.png';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 // Constants
 const ADD_SITE = 'Add Site';
+const NEW_SITE = 'New Site';
+const RELOAD = 'Reload';
 const EDIT_SITE = 'Edit Site';
 const DELETE_SUCCESS = 'Success';
 const DELETE_SITE_ALERT_MSG = 'Are you sure you want to delete this site?';
@@ -20,22 +24,39 @@ const CANCEL_BUTTON_TEXT = 'Cancel';
 const CONFIRM_BUTTON_TEXT = 'Confirm';
 const NO_DATA = 'No Data';
 const PUSH_AUTHORIZATION = 'You have not enabled push permission, please open it in settings.';
+const titleOfNavigation = 'My Sites';
 
 class HomePage extends Component {
 
-    state = {
-        data: [],
-        errorMsg: '',
-        refreshing: false,
-        stationId: null,
-        deviceSN: null,
-        siteTitle: null,
-        siteAddress: null,
+    static navigationOptions = ({navigation}) => {
+        return {
+            title: navigation.getParam('titleOfNavigation'),
+            headerRight: <WKNavigationBarRightItem value={navigation.getParam('icon')} click={navigation.getParam('addSite')}/>,
+        };
     };
+    
+    constructor(props) {
+        super(props);
+        const {navigation} = props;
+        this.state = {
+            data: [],
+            errorMsg: '',
+            isEmpty: false,
+            reloadMsg: '',
+            refreshing: false,
+            stationId: null,
+            deviceSN: null,
+            siteTitle: null,
+            siteAddress: null,
+        };
+    }
+
 
     componentDidMount() {
         __isAndroid__ && StatusBar.setBackgroundColor(Colors.theme);
         needPush && this._initPush();
+        const {navigation} = this.props;
+        navigation.setParams({addSite: null, titleOfNavigation: ' ', icon: null});
         this._loadData();
         this._addObserver();
         // this._pushAuthorization();
@@ -81,7 +102,20 @@ class HomePage extends Component {
                     data: result,
                     refreshing: false,
                     errorMsg: result.length ? '' : NO_DATA,
+                    reloadMsg: result.length ? '' : ADD_SITE,
                 });
+                if(result.length){
+                    this.setState({
+                        isEmpty: false,
+                    });
+                    navigation.setParams({addSite: this._addSite, titleOfNavigation: titleOfNavigation, icon: add_site_btn});
+                }else{
+                    this.setState({
+                        isEmpty: true,
+                    });
+                    navigation.setParams({addSite: null, titleOfNavigation: ' ', icon: null});
+                }
+
                 if (result && result.length && msg === DELETE_SUCCESS) {
                     this.carousel && this.carousel.resetCarousel(result.length - 1);
                 }
@@ -100,6 +134,7 @@ class HomePage extends Component {
                     data: [],
                     refreshing: false,
                     errorMsg,
+                    reloadMsg: RELOAD,
                 });
                 WKToast.show(errorMsg, true);
             }
@@ -176,9 +211,28 @@ class HomePage extends Component {
         navigation.navigate(RouteKeys.SiteInfoPage, {id, name, establishTime});
     };
 
-    _addSite = navigationTitle => {
+    _addSite = () => {
         const {navigation} = this.props;
-        const isAddSite = navigationTitle === ADD_SITE;
+        const {
+            stationId,
+        } = this.state;
+        navigation.navigate(RouteKeys.AddSitePage, {
+            navigationTitle: NEW_SITE,
+            stationId,
+            deviceSN: '',
+            siteTitle: '',
+            siteAddress: '',
+            isAddSite: true,
+            callback: () => {
+                this._loadData();
+                const {data} = this.state;
+                data && data.length && this.carousel && this.carousel.resetCarousel(0);
+            },
+        });
+    };
+
+    _editSite = () => {
+        const {navigation} = this.props;
         const {
             stationId,
             deviceSN,
@@ -186,12 +240,12 @@ class HomePage extends Component {
             siteAddress,
         } = this.state;
         navigation.navigate(RouteKeys.AddSitePage, {
-            navigationTitle,
+            navigationTitle: EDIT_SITE,
             stationId,
-            deviceSN: isAddSite ? '' : deviceSN,
-            siteTitle: isAddSite ? '' : siteTitle,
-            siteAddress: isAddSite ? '' : siteAddress,
-            isAddSite,
+            deviceSN,
+            siteTitle,
+            siteAddress,
+            isAddSite: false,
             callback: () => {
                 this._loadData();
                 const {data} = this.state;
@@ -223,14 +277,14 @@ class HomePage extends Component {
                     });
             });
         } else { // Edit
-            this._addSite(EDIT_SITE);
+            this._editSite();
         }
     };
 
     render() {
         // __DEV__ && console.warn('中间层内网地址： 192.168.2.35:4054 外网地址：39.108.124.91:8036');
-        const {refreshing, data, errorMsg} = this.state;
-        return (<WKGeneralBackground backgroundColor={'#f4f2f4'} showSunshine={false}>
+        const {refreshing, data, errorMsg, reloadMsg, isEmpty} = this.state;
+        return (<WKGeneralBackground backgroundColor={Colors.theme} showSunshine={false}>
             <ScrollView
                 nestedScrollEnabled={true}
                 contentContainerStyle={{flexGrow: 1}} // Be sure that subview can use "flex: 1" property to fill the whole screen.
@@ -248,9 +302,12 @@ class HomePage extends Component {
                 }
             >
                 {
-                    errorMsg && !data.length ? (<WKEmptyView
+                    !data.length ? (<WKEmptyView
                         emptyText={errorMsg}
-                        reload={this._loadData}
+                        reloadText={reloadMsg}
+                        reload={this._addSite}
+                        addSite={this._addSite}
+                        isEmpty={isEmpty}
                     />) : (<SiteInfoView
                         ref={ref => this.carousel = ref}
                         data={data}
@@ -264,8 +321,9 @@ class HomePage extends Component {
                         getInto={this._getInto}
                     />)
                 }
+                
             </ScrollView>
-            <AddSiteButton addSite={() => this._addSite(ADD_SITE)}/>
+            {/* <AddSiteButton addSite={() => this._addSite(ADD_SITE)}/> */}
             <SiteModal
                 ref={ref => this.ref = ref}
                 select={this._editOrDeleteSite}

@@ -1,60 +1,60 @@
-import React,{Component} from 'react'
-import {View,Text,StyleSheet,Animated,TouchableOpacity,TouchableHighlight} from 'react-native'
+import React, { Component } from "react";
+import { Animated, View, StyleSheet, PanResponder, Text } from "react-native";
+
 class donghua extends Component {
-
-    
-    UNSAFE_componentWillMount=()=>{
-        //创建动画属性对象
-        this.ax=new Animated.Value(0);
-        this.ay=new Animated.Value(0);
-
+  pan = new Animated.ValueXY();
+  panResponder = PanResponder.create({
+    onMoveShouldSetPanResponder: () => true,
+    onPanResponderGrant: () => {
+      this.pan.setOffset({
+        x: this.pan.x._value,
+        y: this.pan.y._value
+      });
+    },
+    onPanResponderMove: Animated.event([
+      null,
+      { dx: this.pan.x, dy: this.pan.y }
+    ]),
+    onPanResponderRelease: () => {
+      this.pan.flattenOffset();
     }
-    AnimatedBox=()=>{
-        Animated.timing(this.ax,{
-            toValue:100,
-            duration:5000
-        }).start()
+  });
 
-        Animated.timing(this.ay,{toValue:100,duration:5000}).start()
-
-        console.warn(this.ax,this.ax === '0')
-    }
-
-   
-
-    render() {
-        return (
-            <View style={styles.container}>
-              
-              <TouchableOpacity
-                            onPress={this.AnimatedBox}
-                        >
-                            <Animated.View style={[styles.box,{top:this.ax,left:this.ay}]}><Text>hh</Text></ Animated.View>
-                        </TouchableOpacity>
-               </View>
-        );
-    }
-
+  render() {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.titleText}>Drag this box!</Text>
+        <Animated.View
+          style={{
+            transform: [{ translateX: this.pan.x }, { translateY: this.pan.y }]
+          }}
+          {...this.panResponder.panHandlers}
+        >
+          <View style={styles.box} />
+        </Animated.View>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: Colors.white,
-    },
-    bottomView: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: Colors.theme,
-    },
-    box:{
-        position: 'absolute',
-        backgroundColor:'blue',
-        width:50,
-        height:100
-    }
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor:'white'
+  },
+  titleText: {
+    fontSize: 14,
+    lineHeight: 24,
+    fontWeight: "bold"
+  },
+  box: {
+    height: 150,
+    width: 150,
+    backgroundColor: "blue",
+    borderRadius: 5
+  }
 });
 
 export default donghua;

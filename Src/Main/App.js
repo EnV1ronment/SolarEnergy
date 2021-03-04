@@ -170,7 +170,8 @@ class App extends Component {
                     },
                     headerTintColor: Colors.white, // set color for navigation bar title, back button image and back button text
                     headerTitleStyle: { // set color for navigation bar title
-                        fontWeight: 'normal'
+                        fontWeight: 'normal',
+                        fontSize: 18
                     },
                     // headerBackTitle: '   ', // back button title
                     headerLeft: <WKNavigationBarLeftItem click={this._back}/>,

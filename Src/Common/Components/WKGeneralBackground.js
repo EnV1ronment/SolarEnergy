@@ -31,10 +31,10 @@ export default class WKGeneralBackground extends PureComponent {
                 style={styles.imageWrapper}
                 pointerEvents={'none'} // Dispatch events to super components
             >
-                <Image
+                {/* <Image
                     source={sunshine}
                     style={styles.image}
-                />
+                /> */}
             </View>}
         </View>);
     }

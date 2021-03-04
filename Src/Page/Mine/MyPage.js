@@ -39,12 +39,10 @@ class MyPage extends Component {
         const resetAction = StackActions.reset({
             index: 0,
             actions: [
-                NavigationActions.navigate({routeName: RouteKeys.BottomTabBar}),
+                NavigationActions.navigate({routeName: RouteKeys.LoginPage}),
             ],
         });
         this.props.navigation.dispatch(resetAction);
-        this.props.navigation.navigate(RouteKeys.MyPage);
-        this.props.navigation.navigate(RouteKeys.SettingsPage);
     };
 
     _removeObserver = () => {
@@ -60,7 +58,10 @@ class MyPage extends Component {
         return (<WKGeneralBackground>
             <MyPageView
                 clickItem={this._clickItem}
-                account={this.props.userName}
+                account={'0123456789'}
+                phone={this.props.userName}
+                nickName={'nickName'}
+                resetRoute={this._resetRoute}
             />
         </WKGeneralBackground>);
     }

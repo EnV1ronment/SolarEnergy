@@ -17,6 +17,8 @@ export default class WKEmptyView extends Component {
         reloadTextStyles: PropTypes.object, // Optional. Styles for reload button text.
         reloadTextButtonStyles: PropTypes.object, // Optional. Styles for reload button.
         reload: PropTypes.func, // Optional, default is () => {}
+        reloadText: PropTypes.string,
+        addSite: PropTypes.func,
         showReloadButton: PropTypes.bool, // Optional, default is true.
     };
 
@@ -28,31 +30,28 @@ export default class WKEmptyView extends Component {
     render() {
         const {
             containerStyles,
-            emptyTextStyles,
             reload,
-            reloadTextStyles,
-            reloadTextButtonStyles,
+            textStyles,
+            buttonStyles,
+            textButtonStyles,
             emptyText,
             reloadText,
-            showReloadButton,
+            addSite,
+            isEmpty
         } = this.props;
-        const isEmpty = !!!emptyText.length;
-        if (isEmpty) return null;
         return (<View style={[styles.container, containerStyles]}>
-            {
-                showReloadButton && <TouchableOpacity
-                    style={[styles.reloadBtn, reloadTextButtonStyles]}
+            <Text style={[styles.textButton, textStyles]}>
+                {emptyText}
+            </Text>
+            <TouchableOpacity
+                    style={[styles.button, buttonStyles]}
                     activeOpacity={0.7}
-                    onPress={() => reload && reload()}
+                    onPress={() => isEmpty ? addSite() : reload()}
                 >
-                    <Text style={[styles.reloadText, reloadTextStyles]}>
+                    <Text style={[styles.textButton, textButtonStyles]}>
                         {reloadText}
                     </Text>
                 </TouchableOpacity>
-            }
-            <Text style={[styles.emptyText, emptyTextStyles]}>
-                {emptyText}
-            </Text>
         </View>);
     }
 
@@ -61,7 +60,6 @@ export default class WKEmptyView extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f4f2f4',
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -70,14 +68,18 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         margin: 15,
     },
-    reloadBtn: {
-        backgroundColor: '#00a6ff',
+    button: {
+        backgroundColor: Colors.buttonBgColor,
         borderRadius: 3,
+        height: 50,
+        width: 240,
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        bottom: 100
     },
-    reloadText: {
+    textButton: {
         color: Colors.white,
-        padding: 10,
-        paddingLeft: 18,
-        paddingRight: 18,
+        fontSize:16,
     }
 });

@@ -187,6 +187,11 @@ const Keys = {
 
     configuaration_energy_rates: 'configuaration_energy_rates',
     configuaration_device: 'configuaration_device',
+
+    timezone_title: 'timezone_title',
+
+    Asia_Shanghai: 'Asia_Shanghai',
+    Australia_Queensland: 'Australia_Queensland',
 };
 
 export default Keys;

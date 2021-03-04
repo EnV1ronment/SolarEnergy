@@ -20,7 +20,7 @@ const logoutButton = ({height, click}) => (
             <ImageBackground
                 resizeMode='stretch'
                 style={styles.bg}
-                source={me_logout_icon}
+                // source={me_logout_icon}
             >
                 <Text style={styles.text}>
                     {WK_T(wkLanguageKeys.log_out)}
@@ -39,18 +39,21 @@ export default logoutButton;
 
 const styles = StyleSheet.create({
     container: {
+        height: 60,
+        marginTop: 20,
+        marginBottom: 20,
+        backgroundColor: Colors.cellBackgroundColor,
         justifyContent: 'flex-end',
         alignItems: 'center',
-        paddingBottom: iosSafeAreaBottomHeight + 130,
     },
     bg: {
         width: 250,
-        height: 50,
+        height: 60,
         justifyContent: 'center',
         alignItems: 'center',
     },
     text: {
-        color: Colors.white,
-        fontSize: 14,
+        color: Colors.blue,
+        fontSize: 16,
     }
 });

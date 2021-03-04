@@ -13,17 +13,13 @@ class MapCell extends PureComponent {
     render() {
         const {
             height,
-            title,
-            detail,
             click,
         } = this.props;
         return (
             <TouchableOpacity style={[styles.container, {height}]} activeOpacity={0.8} onPress={click}>
-                <View style={styles.titleView}>
-                    <Image source={site_location} resizeMode='contain'/>
-                    <Text style={styles.title} numberOfLines={1}>{title}</Text>
+                <View style={styles.view}>
+                    <Image style={styles.imageView} source={site_location} resizeMode='contain'/>
                 </View>
-                <Text style={styles.detail} numberOfLines={2}>{detail}</Text>
             </TouchableOpacity>
         );
     }
@@ -31,33 +27,29 @@ class MapCell extends PureComponent {
 
 MapCell.propTypes = {
     height: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    detail: PropTypes.string.isRequired,
     click: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({
     container: {
-        justifyContent: 'center',
-        paddingLeft: 15,
+        width: 60,
+        height: 60,
+        marginLeft: 30,
+        marginBottom: 30,
+        borderRadius: 5,
+        backgroundColor: Colors.theme
     },
-    titleView: {
+    view: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'center',
+        width: 60,
+        height: 60,
     },
-    title: {
-        marginLeft: 5,
-        marginRight: 10,
-        fontSize: 14,
-        color: Colors.buttonBgColor,
-    },
-    detail: {
-        marginLeft: 15,
-        fontSize: 12,
-        marginRight: 10,
-        color: Colors.placeholder,
-        marginTop: 4,
-    },
+    imageView: {
+        width: 30,
+        height: 30,
+    }
 });
 
 export default MapCell;

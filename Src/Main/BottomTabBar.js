@@ -71,7 +71,7 @@ export default function BottomTabBar() {
         tabBarOptions: {
             showLabel: false, // hide tab bar label text
             style: {
-                backgroundColor: Colors.theme // set tab bar background Color
+                backgroundColor: Colors.bottomTabTheme // set tab bar background Color
             }
         },
 

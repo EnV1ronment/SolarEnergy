@@ -22,6 +22,7 @@ export default class WKSearchBar extends Component {
         height: PropTypes.number,
         fontSize: PropTypes.number,
         onSubmitEditing: PropTypes.func,
+        onFocus: PropTypes.func.isRequired,
     };
 
     state = {
@@ -42,6 +43,7 @@ export default class WKSearchBar extends Component {
             textAlign: 'left',
             searchIconLeft: 15
         });
+        this.props.onFocus && this.props.onFocus();
     };
 
     // Resign keyboard
@@ -70,11 +72,12 @@ export default class WKSearchBar extends Component {
         return (<View>
             <TextInput
                 // style={[styles.inputText, {textAlign: this.state.textAlign}]}
-                style={[styles.inputText, {textAlign: 'left', height: _textInputHeight, fontSize: fontSize || 13}]}
+                style={[styles.inputText, {height: _textInputHeight, fontSize: fontSize || 13}]}
                 placeholderTextColor={Colors.placeholder}
                 placeholder={placeholder || WK_T(wkLanguageKeys.search)}
                 selectionColor={Colors.white}
                 autoCapitalize={'none'}
+                numberOfLines={1}
                 autoCorrect={false}
                 returnKeyType={returnKeyType || 'done'}
                 contextMenuHidden={true} // Disable copy and paste
@@ -100,7 +103,7 @@ const styles = StyleSheet.create({
         color: Colors.white,
         paddingLeft: 35,
         paddingRight: 10,
-        backgroundColor: "#081336",
+        backgroundColor: Colors.searchBgColor,
         borderRadius: 3,
         paddingVertical: 0 // make text show whole on Android
     },

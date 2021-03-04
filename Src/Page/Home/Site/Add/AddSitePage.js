@@ -24,6 +24,8 @@ class AddSitePage extends Component {
             deviceSN,
             siteTitle,
             siteAddress,
+            siteCapacity,
+            siteTimeZone,
         } = this._navigationState();
         this.state = {
             isAddSite,
@@ -31,6 +33,8 @@ class AddSitePage extends Component {
             currentDeviceSN: deviceSN,
             currentSiteTitle: siteTitle,
             currentAddress: siteAddress,
+            currentCapacity: siteCapacity ?? '',
+            currentTimeZone: siteTimeZone ?? '',
             currentCoordinate: {},
             hasAuthorized: false,
             // 换设备sn AL2002017100021试一下
@@ -113,6 +117,14 @@ class AddSitePage extends Component {
         });
     };
 
+    _selectTimeZone = () => {
+        const {navigation} = this.props;
+        navigation.navigate(RouteKeys.donghua, {
+            timezone: this.state.currentTimeZone,
+            callback: timezone => this.setState({currentTimeZone: timezone}),
+        });
+    }
+
     _startLocation = () => {
         if (!this.props.hasNetwork) {
             WKToast.show(NETWORK_DISCONNECTED);
@@ -123,39 +135,26 @@ class AddSitePage extends Component {
             currentAddress,
             hasAuthorized,
         } = this.state;
-        // if (!hasAuthorized) {
-        //     WKAlert.show('To continue, turn on your location settings in Google Maps. If you have authorized in settings, please click "Ok" to continue.',
-        //         'CANCEL',
-        //         'OK', () => {
-        //             this._loadCurrentLocation(true);
-        //         });
-        //     return;
-        // }
-        if (currentCoordinate && Object.keys(currentCoordinate).length) {
-            const {navigation} = this.props;
-            // navigation.navigate(RouteKeys.MapPage, {
-            //     currentCoordinate,
-            //     currentAddress,
-            //     callback: params => {
-            //         const {
-            //             address,
-            //             latitude,
-            //             longitude,
-            //         } = params;
-            //         this.setState({
-            //             currentAddress: address,
-            //             currentCoordinate: {
-            //                 latitude,
-            //                 longitude,
-            //             },
-            //         });
-            //     },
-            // });
-        } else {
-            const {navigation} = this.props;
-            navigation.navigate(RouteKeys.donghua);
-            //this._loadCurrentLocation();
-        }
+        const {navigation} = this.props;
+        navigation.navigate(RouteKeys.BaiduMapPage, {
+                currentCoordinate,
+                currentAddress,
+                callback: params => {
+                    const {
+                        address,
+                        latitude,
+                        longitude,
+                    } = params;
+
+                    this.setState({
+                        currentAddress: address,
+                        currentCoordinate: {
+                            latitude,
+                            longitude,
+                        },
+                    });
+                },
+            });
     };
 
     _save = () => {
@@ -163,7 +162,6 @@ class AddSitePage extends Component {
             isAddSite,
             currentAddress,
             currentSiteTitle,
-            currentDeviceSN,
         } = this.state;
         const {hasNetwork} = this.props;
         if (!hasNetwork) {
@@ -174,31 +172,28 @@ class AddSitePage extends Component {
             WKToast.show(EMPTY_TITLE);
             return;
         }
-        if (!currentDeviceSN.trim()) {
-            WKToast.show(EMPTY_SN);
-            return;
-        }
         if (!currentAddress.trim()) {
             WKToast.show(EMPTY_ADDRESS);
             return;
         }
         if (isAddSite) { // Add site.
-            this._addSite(currentSiteTitle, currentDeviceSN, currentAddress);
+            this._addSite(currentSiteTitle, currentAddress, currentCapacity, currentTimeZone);
         } else { // Edit Site
             this._editSite();
         }
     };
 
-    _addSite = (title, deviceSN, address) => {
+    _addSite = (title, address, capacity, timezone) => {
         const {currentCoordinate} = this.state;
         const {latitude, longitude} = currentCoordinate;
         WKLoading.show();
         WKFetch('/station', {
             title,
-            deviceSN,
             address,
             longitude: longitude.toFixed(5),
             latitude: latitude.toFixed(5),
+            capacity,
+            timezone,
             isWebUser: false,
         }, METHOD.POST).then(ret => {
             WKLoading.hide();
@@ -336,6 +331,8 @@ class AddSitePage extends Component {
             currentSiteTitle,
             currentDeviceSN,
             currentAddress,
+            currentCapacity,
+            currentTimeZone,
         } = this.state;
         return (
             <WKGeneralBackground>
@@ -345,7 +342,10 @@ class AddSitePage extends Component {
                     address={currentAddress}
                     scanQRCode={this._scanQRCode}
                     startLocation={this._startLocation}
+                    capacity={currentCapacity}
+                    timezone={currentTimeZone}
                     save={this._save}
+                    selectTimeZone={this._selectTimeZone}
                     onChangeText={title => this.state.currentSiteTitle = title}
                 />
             </WKGeneralBackground>

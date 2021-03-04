@@ -189,4 +189,9 @@ export default {
 
     configuaration_energy_rates: 'Energy Rates',
     configuaration_device: 'Device',
+
+    timezone_title: 'Time Zone',
+
+    Asia_Shanghai: 'UTC + 08:00 Asia Shanghai',
+    Australia_Queensland: 'UTC + 10:00 Australia Queensland',
 };
