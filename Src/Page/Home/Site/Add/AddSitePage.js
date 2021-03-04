@@ -8,7 +8,8 @@ import axios from "axios";
 import WKFetch from "../../../../Network/WKFetch";
 
 const EMPTY_TITLE = 'Site title cannot be empty';
-const EMPTY_SN = 'Device SN cannot be empty';
+const EMPTY_CAPCITY = 'Capacity cannot be empty';
+const EMPTY_TIMEZONE = 'Time zone cannot be empty';
 const EMPTY_ADDRESS = 'Address cannot be empty';
 const NETWORK_DISCONNECTED = 'Network Disconnected!';
 
@@ -119,7 +120,7 @@ class AddSitePage extends Component {
 
     _selectTimeZone = () => {
         const {navigation} = this.props;
-        navigation.navigate(RouteKeys.donghua, {
+        navigation.navigate(RouteKeys.TimeZonePage, {
             timezone: this.state.currentTimeZone,
             callback: timezone => this.setState({currentTimeZone: timezone}),
         });
@@ -158,58 +159,72 @@ class AddSitePage extends Component {
     };
 
     _save = () => {
-        const {
-            isAddSite,
-            currentAddress,
-            currentSiteTitle,
-        } = this.state;
-        const {hasNetwork} = this.props;
-        if (!hasNetwork) {
-            WKToast.show(NETWORK_DISCONNECTED);
-            return;
-        }
-        if (!currentSiteTitle.trim()) {
-            WKToast.show(EMPTY_TITLE);
-            return;
-        }
-        if (!currentAddress.trim()) {
-            WKToast.show(EMPTY_ADDRESS);
-            return;
-        }
-        if (isAddSite) { // Add site.
-            this._addSite(currentSiteTitle, currentAddress, currentCapacity, currentTimeZone);
-        } else { // Edit Site
-            this._editSite();
-        }
+         const {navigation} = this.props;
+        navigation.navigate(RouteKeys.ConfigurationPage, {
+            stationId: this.state.stationId,
+        });
+        // const {
+        //     isAddSite,
+        //     currentAddress,
+        //     currentSiteTitle,
+        //     currentTimeZone,
+        //     currentCapacity
+        // } = this.state;
+        // const {hasNetwork} = this.props;
+        // if (!hasNetwork) {
+        //     WKToast.show(NETWORK_DISCONNECTED);
+        //     return;
+        // }
+        // if (!currentSiteTitle.trim()) {
+        //     WKToast.show(EMPTY_TITLE);
+        //     return;
+        // }
+        // if (!currentAddress.trim()) {
+        //     WKToast.show(EMPTY_ADDRESS);
+        //     return;
+        // }
+        // if (!currentCapacity.trim()) {
+        //     WKToast.show(EMPTY_CAPCITY);
+        //     return;
+        // }
+        // if (!currentTimeZone.trim()) {
+        //     WKToast.show(EMPTY_TIMEZONE);
+        //     return;
+        // }
+        // if (isAddSite) { // Add site.
+        //     this._addSite(currentSiteTitle, currentAddress, currentCapacity, currentTimeZone);
+        // } else { // Edit Site
+        //     this._editSite();
+        // }
     };
 
     _addSite = (title, address, capacity, timezone) => {
         const {currentCoordinate} = this.state;
         const {latitude, longitude} = currentCoordinate;
-        WKLoading.show();
-        WKFetch('/station', {
-            title,
-            address,
-            longitude: longitude.toFixed(5),
-            latitude: latitude.toFixed(5),
-            capacity,
-            timezone,
-            isWebUser: false,
-        }, METHOD.POST).then(ret => {
-            WKLoading.hide();
-            const {
-                ok,
-                errorCode,
-                errorMsg,
-            } = ret;
-            if (ok) {
-                const {navigation} = this.props;
-                navigation.getParam('callback')();
-                navigation.goBack();
-            } else {
-                WKToast.show(errorMsg);
-            }
-        });
+        // WKLoading.show();
+        // WKFetch('/station', {
+        //     title,
+        //     address,
+        //     longitude: longitude.toFixed(5),
+        //     latitude: latitude.toFixed(5),
+        //     capacity,
+        //     timezone,
+        //     isWebUser: false,
+        // }, METHOD.POST).then(ret => {
+        //     WKLoading.hide();
+        //     const {
+        //         ok,
+        //         errorCode,
+        //         errorMsg,
+        //     } = ret;
+        //     if (ok) {
+        //         const {navigation} = this.props;
+        //         navigation.getParam('callback')();
+        //         navigation.goBack();
+        //     } else {
+        //         WKToast.show(errorMsg);
+        //     }
+        // });
     };
 
     _editSite = () => {
@@ -346,7 +361,11 @@ class AddSitePage extends Component {
                     timezone={currentTimeZone}
                     save={this._save}
                     selectTimeZone={this._selectTimeZone}
-                    onChangeText={title => this.state.currentSiteTitle = title}
+                    onChangeText={params => {
+                        const {title, capacity} = params;
+                        title && (this.state.currentSiteTitle = title);
+                        capacity && (this.state.currentCapacity = capacity);
+                    }}
                 />
             </WKGeneralBackground>
         );

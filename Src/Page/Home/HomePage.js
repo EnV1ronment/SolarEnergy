@@ -216,7 +216,7 @@ class HomePage extends Component {
         const {
             stationId,
         } = this.state;
-        navigation.navigate(RouteKeys.AddSitePage, {
+        navigation.navigate(RouteKeys.EnergyRatesPage, {
             navigationTitle: NEW_SITE,
             stationId,
             deviceSN: '',

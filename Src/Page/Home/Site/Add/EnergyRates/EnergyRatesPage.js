@@ -3,24 +3,23 @@ import React, {Component} from 'react';
 import {
     StyleSheet,
     Text,
-    FlatList,
+    ScrollView,
     TouchableOpacity,
-    Image,
     View,
+    Switch,
 } from 'react-native';
 import WKGeneralBackground from "../../../../../Common/Components/WKGeneralBackground";
-import enter_arrow from '../../../../../Source/Common/enter_arrow.png';
-import Languages from "../../../../../Common/MultiLanguage/Languages";
+import PeriodsView from "./Components/PeriodsView";
 
-const rowHeight = 50;
-const marginTopOfFirstRow = 15;
-const marginTopOfRow = 6;
 
 class EnergyRatesPage extends Component {
 
     state = {
-        language: WK_GetCurrentLocale(),
-        listHeight: 0,
+        differentiateDay: false,
+        differentiateTime: false,
+        isWeekend: false,
+        peak_periods: [],
+        off_peak_periods: [],
     };
 
     dataSource = [
@@ -31,95 +30,188 @@ class EnergyRatesPage extends Component {
     // static navigationOptions = () => ({title: WK_T(wkLanguageKeys.setting)});
     static navigationOptions = () => ({title: 'EnergyRatesPage'});
 
-    _clickItem = (route) => {
-        this.props.navigation.navigate(route);
+    componentDidMount () {
+    }
+
+    _save = () => {
+        console.warn(this.state)
     };
 
-    _scanQRCode = () => {
-        const {navigation} = this.props;
-        navigation.navigate(RouteKeys.AddDevicePage, {
-            stationId: '',
-            stationCode: '',
-            callback: sn => this.setState({currentDeviceSN: sn}),
-        });
-    };
-
-    _renderItem = ({item, index}) => {
-        const {title, route} = item;
-        const {language} = this.state;
-        return (
-            <TouchableOpacity
-                style={[styles.cell, {
-                    height: rowHeight,
-                    marginTop: index ? marginTopOfRow : marginTopOfFirstRow,
-                }]}
-                activeOpacity={0.8}
-                onPress={() => this._scanQRCode(route)}
-            >
-                <Text style={styles.title}>{title}</Text>
-                <View style={styles.languageContainer}>
-                    {route === RouteKeys.LanguagePage && <Text style={styles.language}>{Languages[language]}</Text>}
-                    <Image source={enter_arrow} style={styles.arrow}/>
-                </View>
-            </TouchableOpacity>
-        );
-    };
-
+    get_customized_periods_children = (flag) =>{
+        const {peak_periods, off_peak_periods} = this.state;
+        return(flag ? <View>
+            <Text style={styles.mb_20_Text}>Peak:</Text>
+          <PeriodsView periods={peak_periods} onValueChange={(periods)=>this.setState({peak_periods: periods})}/>
+            <Text style={styles.mtb_20_Text}>Off - Peak:</Text>
+          <PeriodsView periods={off_peak_periods} onValueChange={(periods)=>this.setState({off_peak_periods: periods})}/>
+      </View>  : null)
+    }
     render() {
-        const {
-            listHeight,
-            visible,
-        } = this.state;
-        const totalEachRowHeight = rowHeight + marginTopOfRow;
-        const listContentHeight = (totalEachRowHeight * this.dataSource.length - 1) + marginTopOfFirstRow;
-        const listFooterHeight = listHeight - listContentHeight;
+        const {differentiateDay, differentiateTime, isWeekend} = this.state;
+        let weekdayBGColor = !isWeekend ? {backgroundColor: 'rgb(31, 54, 119)'} : null;
+        let weekdendBGColor = isWeekend ? {backgroundColor: 'rgb(31, 54, 119)'} : null;
+        let periods = this.get_customized_periods_children(differentiateTime);
         return (<WKGeneralBackground>
-            <FlatList
-                renderItem={this._renderItem}
-                data={this.dataSource}
-                initialNumToRender={10}
-                keyExtractor={(item, index) => index.toString()}
-                onLayout={e => { 
-                    const height = e.nativeEvent.layout.height;
-                    if (this.state.listHeight < height) {
-                        this.setState({listHeight: height});
-                    }
-                }}
-            />
+            <View style={{width: __SCREEN_WIDTH__, height: __SCREEN_HEIGHT__ - 200}}>
+                <ScrollView
+                    nestedScrollEnabled={true}
+                    contentContainerStyle={{flexGrow: 1}}>
+                    <View style={styles.cardView}>
+                        <View style={styles.titleView}>
+                            <Text style={styles.title}>Energy rates varies from weekday to weekend</Text> 
+                            <Switch 
+                                style={{ transform: [{ scaleX: 0.6 }, { scaleY: 0.6 }] }} 
+                                trackColor={{ false: 'rgb(191, 191, 191)', true: Colors.buttonBgColor }} 
+                                ios_backgroundColor='rgb(191, 191, 191)'
+                                onValueChange={()=>this.setState({differentiateDay: !differentiateDay})}
+                                value={differentiateDay}/>
+                        </View>  
+                        <Text style={styles.info}>Turn on the switch if your rates vary from time to time</Text>  
+                        {differentiateDay && <View style={styles.selectrdBar}>
+                            <TouchableOpacity
+                                style={[styles.leftButton, weekdayBGColor]}
+                                onPress={()=>this.setState({isWeekend: false})}
+                                activeOpacity={0.5}
+                            >
+                                <Text style={styles.leftButtonText}>WeekDay</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.rightButton, weekdendBGColor]}
+                                onPress={()=>this.setState({isWeekend: true})}
+                                activeOpacity={0.5}
+                            >
+                                <Text style={styles.rightButtonText}>Weekend</Text>
+                            </TouchableOpacity>
+                        </View>}
+                    </View>
+                    <View style={styles.cardView}>
+                        <View style={styles.titleView}>
+                            <Text style={styles.title}>Time of Use Rate</Text>  
+                            <Switch 
+                                style={{ transform: [{ scaleX: 0.6 }, { scaleY: 0.6 }] }} 
+                                trackColor={{ false: 'rgb(191, 191, 191)', true: Colors.buttonBgColor }} 
+                                ios_backgroundColor='rgb(191, 191, 191)'
+                                onValueChange={()=>this.setState({differentiateTime: !differentiateTime})}
+                                value={differentiateTime}/>
+                        </View>  
+                        <Text style={styles.info}>Turn on the switch if your energy rates vary from weekday an weekend</Text>  
+                        {periods}
+                    </View>
+                </ScrollView>
+            </View>
+           
+            <View style={styles.bottomButtonContainer}>
+                <TouchableOpacity
+                    style={styles.bottomButton}
+                    onPress={this._save}
+                    activeOpacity={0.5}
+                >
+                    <Text style={styles.bottomButtonText}>Done</Text>
+                </TouchableOpacity>
+            </View>
         </WKGeneralBackground>);
     }
 
 }
 
 const styles = StyleSheet.create({
-    cell: {
+    cardView: {
         borderRadius: 3,
+        padding: 20,
         backgroundColor: Colors.cellBackgroundColor,
-        marginLeft: 5,
-        marginRight: 5,
-        flexDirection: 'row',
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 20,
         justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingLeft: 10,
-        paddingRight: 8,
     },
-    languageContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    language: {
-        marginRight: 10,
-        fontSize: 11,
-        color: Colors.placeholder,
+    titleView: {
+        flexDirection: 'row'
     },
     title: {
-        marginLeft: 10,
+        marginBottom: 20,
+        width: __SCREEN_WIDTH__ - 120,
         color: Colors.white,
-        fontSize: 14,
+        fontSize:24,
+        fontWeight: 'bold'
     },
-    arrow: {
-        width: 5,
-        height: 9,
+    switchView: {
+        width: 20,
+        height: 20
+    },
+    info: {
+        marginBottom: 20,
+        color: Colors.placeholder,
+        fontSize:16,
+    },
+    selectedView: {
+        borderRadius: 3,
+        padding: 20,
+        backgroundColor: Colors.cellBackgroundColor,
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 20,
+        justifyContent: 'space-between',
+    },
+    selectrdBar: {
+        flexDirection: 'row'
+    },
+    leftButton: {
+        flex: 1,
+        height: 50,
+        justifyContent: 'center',
+        alignItems:'center',
+        borderWidth: 1,
+        borderColor: 'rgb(31, 54, 119)',
+        borderBottomLeftRadius: 8,
+        borderTopLeftRadius: 8,
+    },
+    leftButtonText: {
+        color: Colors.white,
+        fontSize:16,
+    },
+    rightButton: {
+        flex: 1,
+        height: 50,
+        justifyContent: 'center',
+        alignItems:'center',
+        borderWidth: 1,
+        borderColor: 'rgb(31, 54, 119)',
+        borderBottomRightRadius: 8,
+        borderTopRightRadius: 8,
+    },
+    rightButtonText: {
+        color: Colors.white,
+        fontSize:16,
+    },
+    mtb_20_Text: {
+        marginTop: 20,
+        marginBottom: 20,
+        fontSize: 16,
+        color: "#fff",
+    },
+    mb_20_Text: {
+        marginBottom: 20,
+        fontSize: 16,
+        color: "#fff",
+    },
+    // Bottom button
+    bottomButtonContainer: {
+        height: 80,
+        width: SCREEN_WIDTH,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    bottomButton: {
+        backgroundColor: Colors.buttonBgColor,
+        borderRadius: 3,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 50,
+        width: 240,
+    },
+    bottomButtonText: {
+        color: Colors.white,
+        fontSize:16,
     },
 })
 

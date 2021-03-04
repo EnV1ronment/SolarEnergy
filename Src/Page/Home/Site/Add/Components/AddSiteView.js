@@ -63,7 +63,7 @@ class AddSiteView extends Component {
     _onChangeText = (value, key) => {
         const t = value.substr(0, 64);
         this.setState({[key]: t});
-        // this.props.onChangeText(t);
+        this.props.onChangeText({[key]: t});
     };
 
     _getTimeZone = (timezone) => {

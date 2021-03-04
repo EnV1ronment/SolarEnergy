@@ -8,28 +8,22 @@ import {
     Image,
     View,
 } from 'react-native';
+import {StackActions, NavigationActions} from 'react-navigation';
 import WKGeneralBackground from "../../../../../Common/Components/WKGeneralBackground";
 import enter_arrow from '../../../../../Source/Common/enter_arrow.png';
-import Languages from "../../../../../Common/MultiLanguage/Languages";
-
-const rowHeight = 50;
-const marginTopOfFirstRow = 15;
-const marginTopOfRow = 6;
 
 class ConfigurationPage extends Component {
 
     state = {
-        language: WK_GetCurrentLocale(),
-        listHeight: 0,
     };
 
     dataSource = [
-        {title: WK_T(wkLanguageKeys.configuaration_energy_rates), route: RouteKeys.AccountPage},
+        {title: WK_T(wkLanguageKeys.configuaration_energy_rates), route: RouteKeys.EnergyRatesPage},
         {title: WK_T(wkLanguageKeys.configuaration_device), route: RouteKeys.AddDevicePage},
     ];
 
     // static navigationOptions = () => ({title: WK_T(wkLanguageKeys.setting)});
-    static navigationOptions = () => ({title: 'ConfigurationPage'});
+    static navigationOptions = () => ({title: 'Configuration'});
 
     _clickItem = (route) => {
         if (route === RouteKeys.AddDevicePage) {
@@ -44,35 +38,49 @@ class ConfigurationPage extends Component {
         }
     };
 
-    _renderItem = ({item, index}) => {
+    _renderItem = ({item}) => {
         const {title, route} = item;
-        const {language} = this.state;
         return (
-            <TouchableOpacity
+             <TouchableOpacity
                 style={[styles.cell, {
-                    height: rowHeight,
-                    marginTop: index ? marginTopOfRow : marginTopOfFirstRow,
+                    height: 60,
+                    borderBottomWidth: 2,
+                    borderBottomColor: "rgb(34, 44, 63)",
                 }]}
                 activeOpacity={0.8}
                 onPress={() => this._clickItem(route)}
             >
-                <Text style={styles.title}>{title}</Text>
-                <View style={styles.languageContainer}>
-                    {route === RouteKeys.LanguagePage && <Text style={styles.language}>{Languages[language]}</Text>}
+                <View style={styles.textView}>
+                    <Text style={styles.title} numberOfLines={1}>{title}</Text>
+                    <TouchableOpacity
+                        activeOpacity={0.8}
+                        onPress={() => this._learnMore(item)}
+                    >
+                        <Text style={styles.learnMore} numberOfLines={1}>learn more</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.container}>
                     <Image source={enter_arrow} style={styles.arrow}/>
                 </View>
             </TouchableOpacity>
         );
     };
 
+    _learnMore = (item) => {
+        console.warn(item)
+    };
+
+    _skip = () => {
+        const resetAction = StackActions.reset({
+            index: 0,
+            actions: [
+                NavigationActions.navigate({routeName: RouteKeys.BottomTabBar}),
+            ],
+        });
+        this.props.navigation.dispatch(resetAction);
+    }
+
     render() {
-        const {
-            listHeight,
-            visible,
-        } = this.state;
-        const totalEachRowHeight = rowHeight + marginTopOfRow;
-        const listContentHeight = (totalEachRowHeight * this.dataSource.length - 1) + marginTopOfFirstRow;
-        const listFooterHeight = listHeight - listContentHeight;
         return (<WKGeneralBackground>
             <FlatList
                 renderItem={this._renderItem}
@@ -86,6 +94,15 @@ class ConfigurationPage extends Component {
                     }
                 }}
             />
+             <View style={styles.bottomButtonContainer}>
+                    <TouchableOpacity
+                        style={styles.bottomButton}
+                        onPress={this._skip}
+                        activeOpacity={0.5}
+                    >
+                        <Text style={styles.bottomButtonText}>Skip</Text>
+                    </TouchableOpacity>
+                </View>
         </WKGeneralBackground>);
     }
 
@@ -94,32 +111,65 @@ class ConfigurationPage extends Component {
 const styles = StyleSheet.create({
     cell: {
         borderRadius: 3,
-        backgroundColor: Colors.cellBackgroundColor,
         marginLeft: 5,
         marginRight: 5,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingLeft: 10,
-        paddingRight: 8,
+        marginLeft: 14,
+        marginRight: 12,
     },
-    languageContainer: {
+    container: {
+        width: 20,
         flexDirection: 'row',
         alignItems: 'center',
     },
-    language: {
-        marginRight: 10,
-        fontSize: 11,
-        color: Colors.placeholder,
+    textView: {
+        flex: 1,
+        marginLeft: 10,
+        flexDirection: 'row',
+        color: Colors.white,
+        fontSize: 16,
     },
     title: {
         marginLeft: 10,
         color: Colors.white,
+        fontSize: 16,
+    },
+    learnMore: {
+        flex: 1,
+        height: 60,
+        marginLeft: 20,
+        marginTop: 2,
+        color: Colors.buttonBgColor,
+        textDecorationLine: 'underline',
         fontSize: 14,
     },
     arrow: {
-        width: 5,
-        height: 9,
+        width: 7,
+        height: 14,
+    },
+     // Bottom button
+     bottomButtonContainer: {
+        height: 150,
+        width: SCREEN_WIDTH,
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        bottom: 81 + iosSafeAreaBottomHeight,
+    },
+    bottomButton: {
+        borderColor: Colors.buttonBgColor,
+        borderWidth: 1,
+        borderRadius: 3,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 50,
+        width: 240,
+    },
+    bottomButtonText: {
+        color: Colors.buttonBgColor,
+        fontSize:16,
     },
 })
 
