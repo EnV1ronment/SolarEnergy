@@ -28,7 +28,7 @@ class EnergyRatesPage extends Component {
     ];
 
     // static navigationOptions = () => ({title: WK_T(wkLanguageKeys.setting)});
-    static navigationOptions = () => ({title: 'EnergyRatesPage'});
+    static navigationOptions = () => ({title: 'EnergyRates'});
 
     componentDidMount () {
     }
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
         width: __SCREEN_WIDTH__ - 120,
         color: Colors.white,
         fontSize:24,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
     switchView: {
         width: 20,
@@ -142,6 +142,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         color: Colors.placeholder,
         fontSize:16,
+        lineHeight: 22
     },
     selectedView: {
         borderRadius: 3,

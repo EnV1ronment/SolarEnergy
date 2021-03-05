@@ -263,6 +263,7 @@ class BaiduMapPage extends Component {
     _clickItem = (item) => {
         const {location, name, address} = item;
         const {lat, lng} = location;
+        this._onListUp();
         this.setState({
             centerLongitude: lng,
             centerLatitude: lat, 
@@ -323,9 +324,6 @@ class BaiduMapPage extends Component {
                             }}
                             />
                     </View>
-                </View>
-                <View style={styles.searchList}>
-                    
                 </View>
                 <Animated.View style={[styles.searchList, {top: this.state.distanceTop,
                 transform: [{ translateY: this.panTop.y }]}]}>

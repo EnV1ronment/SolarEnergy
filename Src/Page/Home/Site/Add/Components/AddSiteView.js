@@ -139,13 +139,13 @@ class AddSiteView extends Component {
                         paddingRight: 0,
                     }]}>
                         <TextInput
-                            keyboardType={'default'}
+                            keyboardType={'numeric'}
                             placeholderTextColor={Colors.placeholder}
                             selectionColor={Colors.white}
                             autoFocus={false}
                             value={this.state.capacity}
                             style={styles.textInput}
-                            maxLength={10000}
+                            maxLength={8}
                             onFocus={() => this._removeUnit(this.state.capacity)}
                             onBlur={() => this._addUnit(this.state.capacity)}
                             placeholder={'Please enter solar capacity'}
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     },
     bottomButton: {
         backgroundColor: Colors.buttonBgColor,
-        borderRadius: 3,
+        borderRadius: 6,
         justifyContent: 'center',
         alignItems: 'center',
         height: 50,

@@ -77,6 +77,8 @@ const RouteKeys = {
     CustomizePage: 'CustomizePage',
     
     donghua: 'donghua',
+    
+    SNHelpPage: 'SNHelpPage',
 
 };
 

@@ -91,7 +91,7 @@ export default {
     enter_station_name: 'Enter station name',
     quit_not_save: 'Quit and do not save?',
     edit: 'Edit',
-    align_qrCode: 'Align QR/Bar code within frame to scan',
+    align_qrCode: 'Put the QR/Bar code within the frame to scan',
     enter_manually: 'Enter Manually',
     flashlight: 'Flashlight',
     enter_snCode: 'Please enter sn code',
